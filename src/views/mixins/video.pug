@@ -1,0 +1,7 @@
+mixin video(obj)
+    div
+        h4=obj.title
+        ul 
+            li #{obj.rating}/5
+            li #{obj.views} views 
+            li Posted #{obj.createdAt}

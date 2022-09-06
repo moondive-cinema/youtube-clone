@@ -1,0 +1,11 @@
+extends base
+include mixins/video
+
+block content 
+    h2 Welcome here you will see the trending videos
+    input(placeholder="Whats your name")
+    button send 
+    each object in videos 
+        +video(object)
+    else 
+        p Nothing Found
