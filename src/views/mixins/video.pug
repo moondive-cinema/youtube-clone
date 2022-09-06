@@ -1,6 +1,7 @@
 mixin video(obj)
     div
-        h4=obj.title
+        h4
+            a(href=`/videos/${obj.id}`)=obj.title
         ul 
             li #{obj.rating}/5
             li #{obj.views} views 
