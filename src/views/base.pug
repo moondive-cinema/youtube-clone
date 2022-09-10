@@ -5,18 +5,19 @@ html(lang="ko")
         link(rel="stylesheet" href="https://unpkg.com/mvp.css")
     body
         header
-            if fakeUser.loggedIn
-                small Hello #{fakeUser.username}
+            h1=pageTitle
             nav
-
                 ul
                     if fakeUser.loggedIn
+                        li
+                            a(href="/videos/upload") Upload Video
                         li 
                             a(href="/logout") Log out
                     else
+                        li
+                            a(href="/videos/upload") Upload Video
                         li 
                             a(href="/login") Login
-            h1=pageTitle
         main
             block content
     include partials/footer
