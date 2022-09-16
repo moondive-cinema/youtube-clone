@@ -1,5 +1,9 @@
 extends base
 
 block content 
-    h3 #{video.views} #{video.views===1 || video.views===0 ? "view" : "views"}
+    p=video.description
+    small=video.CreatedAt
+    p=video.hashtags
     a(href=`${video.id}/edit`) Edit Video &rarr; 
+    br
+    a(href=`${video.id}/delete`) Delete Video &rarr; 
