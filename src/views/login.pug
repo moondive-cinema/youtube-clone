@@ -1,0 +1,14 @@
+extends base
+
+block content
+    h4 Login
+    if errorMessage 
+        p=errorMessage
+    form(method="POST")
+        input(name="username", placeholder="Username",type="text", required)
+        input(name="password", placeholder="Password", type="password", required)
+        input(value="Login", type="submit")
+    hr
+    div 
+        span Don't have an account?
+        a(href="/join") Create one now &rarr;

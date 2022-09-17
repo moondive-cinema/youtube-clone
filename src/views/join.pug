@@ -1,0 +1,18 @@
+extends base
+
+block content
+    h4 Join
+    if errorMessage 
+        p=errorMessage
+    form(method="POST")
+        input(name="name", placeholder="Name", type="text", required)
+        input(name="email", placeholder="Email", type="email", required)
+        input(name="username", placeholder="Username",type="text", required)
+        input(name="password", placeholder="Password", type="password", required)
+        input(name="password2", placeholder="Confirm Password", type="password", required)
+        input(name="location", placeholder="Location",type="text", required)
+        input(value="Join", type="submit")
+    hr
+    div 
+        span Already have an account?
+        a(href="/login") Login now &rarr;

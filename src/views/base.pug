@@ -1,7 +1,7 @@
 doctype html
 html(lang="ko")
     head
-        title #{pageTitle} | NuTube
+        title #{ pageTitle } | #{ siteName }
         link(rel="stylesheet" href="https://unpkg.com/mvp.css")
     body
         header
@@ -11,9 +11,19 @@ html(lang="ko")
                     li
                         a(href="/") Home
                     li
-                        a(href="/videos/upload") Upload Video
-                    li
                         a(href="/search") Search Video
+                    if loggedIn
+                        li
+                            a(href="/videos/upload") Upload Video
+                        li 
+                            a(href="/logout") Log Out
+                        li 
+                            a(href="#") #{ loggedInUser.name }'s Profile
+                    else
+                        li  
+                            a(href="/join") Join
+                        li 
+                            a(href="/login") Log In
         main
             block content
     include partials/footer
