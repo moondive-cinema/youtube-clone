@@ -49,13 +49,15 @@ export const getLogin = (req, res) => {
 
 export const postLogin = async (req, res) => {
     const { username, password } = req.body;
-    console.log("username: ", username, " & pw: ", password);
     const pageTitle = "Login"
     const user = await User.findOne({ username });
     if (!user) {
         return res.status(400).render("login", {pageTitle, errorMessage: "User not exists",});
     }
-    const pass = bcrypt.compare(password, user.password);
+    console.log(user.password);
+    console.log(password);
+    const pass = await bcrypt.compare(password, user.password);
+    console.log(pass);
     if (!pass) {
         return res.status(400).render("login", {pageTitle, errorMessage: "Wrong password",});
     } 
@@ -173,18 +175,86 @@ export const getEdit = (req, res) => {
 
 export const postEdit = async (req, res) => {
     const {
-        session: {_id},
-        body: {name, email, username, location},
+        session: {
+            user: { _id },
+          },
+          body: { name, email, username, location },
     } = req;
-    const updateUser = await User.findByIdAndUpdate(
+    
+    // Form에 입력된 email과 username이 User 모델에 이미 존재하는 경우 이슈가 있는 필드를 에러메시지와 함께 렌더링함
+    let existingEmail = false;
+    let existingUsername = false;
+    if ( req.session.user.email !== email && User.exists({email: email}) ) {
+     existingEmail = true;
+    }
+    if ( req.session.user.username !== username && User.exists({username: username}) ) {
+        existingUsername = true;
+    }
+    if ( existingEmail  &&  existingUsername ) {
+        return res.render("edit-profile", 
+            { 
+                pageTitle: "Edit Profile", 
+                errorMessage: `Both email(${email}) and username(${username}) are already taken.`,
+            });
+        } else if  ( existingEmail ) {
+            return res.render("edit-profile", 
+            { 
+                pageTitle: "Edit Profile", 
+                errorMessage: `email(${email}) already taken.`,
+            });
+        } else if ( existingUsername ) {
+            return res.render("edit-profile", 
+            { 
+                pageTitle: "Edit Profile", 
+                errorMessage: `username(${username}) already taken.`,
+            });
+        }
+    
+    // 
+    const updatedUser = await User.findByIdAndUpdate(
         _id, {name, email, username, location}, {new: true}
     );
-    req.session.user = updateUser;
-    return res.render("edit-post");
+    req.session.user = updatedUser;
+    return res.redirect("edit");
 }
 
 
-export const remove = (req, res) => res.send("Remove User");
+export const getChangePassword = (req, res) => {
+    if (req.session.user.socialLogin === true) {
+      return res.redirect("/");
+    }
+    return res.render("change-password", { pageTitle: "Change Password" });
+  };
+
+
+  export const postChangePassword = async (req, res) => {
+    // 세션의 유저의 언더바 아이디, 바디의 패스워드(올드, 뉴, 뉴컨펌)
+    // 파인드원(필터=아이디)의 패스워드와 바디 패스워드 비교 (해쉬태그 bcrypt)=> 다르면 다르다 에러와 렌더링
+    // 뉴와 뉴컨펌 패스워드 비교 => 다르면 다르다 에러와 렌더링
+    // 아이디로 필터링된 유저의 패스워드를 뉴패스워드에 할당
+    // await user.save()
+    const {
+        session: {user: {_id},},
+        body: {oldPassword, newPassword, newPasswordConfirmation},
+    } = req;
+    const user = await User.findById(_id);
+    const ok = await bcrypt.compare(oldPassword, user.password);
+    if (!ok) {
+        return res.status(400).render("change-password", {
+            pageTitle: "Change Password", 
+            errorMessage: "The current password is incorrect",
+        });
+    }
+    if (newPassword !== newPasswordConfirmation) {
+        return res.status(400).render("change-password", {
+            pageTitle: "Change Password", 
+            errorMessage: "The password does not match the confirmation",
+        });
+    }
+    user.password = newPassword;
+    user.save();
+    return res.redirect("/users/logout");
+  };
 
 
 export const see = (req, res) => res.send("See User");

@@ -1,12 +1,5 @@
 import Video from "../models/Video"; 
 
-/*
-console.log("start")
-Video.find({}, (error, videos) => {
-  return res.render("home", { pageTitle: "Home", videos });
-});
-console.log("finished")
-*/
 
 export const home = async (req, res) => {
   const videos = await Video.find({}).sort({createdAt: "desc"});
@@ -30,7 +23,7 @@ export const getEdit = async (req, res) => {
   if (!video){
     return res.render("404", { pageTitle: "Video not found." });
   }
-  return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
+  return res.render("edit-video", { pageTitle: `Edit: ${video.title}`, video });
 };
 
 
