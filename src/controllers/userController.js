@@ -176,9 +176,10 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
     const {
         session: {
-            user: { _id },
+            user: { _id, avatarUrl },
           },
           body: { name, email, username, location },
+          file,
     } = req;
     
     // Form에 입력된 email과 username이 User 모델에 이미 존재하는 경우 이슈가 있는 필드를 에러메시지와 함께 렌더링함
@@ -212,7 +213,15 @@ export const postEdit = async (req, res) => {
     
     // 
     const updatedUser = await User.findByIdAndUpdate(
-        _id, {name, email, username, location}, {new: true}
+        _id, 
+        {
+            avatarUrl: file ? file.path : avatarUrl, 
+            name, 
+            email, 
+            username, 
+            location
+        }, 
+        {new: true}
     );
     req.session.user = updatedUser;
     return res.redirect("edit");
@@ -228,11 +237,6 @@ export const getChangePassword = (req, res) => {
 
 
   export const postChangePassword = async (req, res) => {
-    // 세션의 유저의 언더바 아이디, 바디의 패스워드(올드, 뉴, 뉴컨펌)
-    // 파인드원(필터=아이디)의 패스워드와 바디 패스워드 비교 (해쉬태그 bcrypt)=> 다르면 다르다 에러와 렌더링
-    // 뉴와 뉴컨펌 패스워드 비교 => 다르면 다르다 에러와 렌더링
-    // 아이디로 필터링된 유저의 패스워드를 뉴패스워드에 할당
-    // await user.save()
     const {
         session: {user: {_id},},
         body: {oldPassword, newPassword, newPasswordConfirmation},
