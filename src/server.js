@@ -16,10 +16,10 @@ app.use(logger);
 app.use(express.urlencoded({extended:true}));
 
 app.use(session({
-    secret: "mmm",
-    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/wetube"}),
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.COOKIE_SECRET,
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
+    resave: false,
+    saveUninitialized: false,
 }))
 
 app.use(localMiddleware);
