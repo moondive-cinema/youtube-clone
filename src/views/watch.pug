@@ -1,9 +1,11 @@
 extends base
 
 block content 
-    p=video.description
-    small=video.CreatedAt
-    p=video.hashtags
+    video(src="/"+video.fileUrl, controls)
+    div
+        p=video.description
+        small=video.CreatedAt
+        p=video.hashtags
     a(href=`${video.id}/edit`) Edit Video &rarr; 
     br
     a(href=`${video.id}/delete`) Delete Video &rarr; 

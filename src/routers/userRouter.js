@@ -1,5 +1,5 @@
 import express from "express";
-import { protectorMiddleware, publicOnlyMiddleware, uploadFiles } from "../middlewares";
+import { protectorMiddleware, publicOnlyMiddleware, avatarUploads } from "../middlewares";
 import { 
     getEdit,
     postEdit, 
@@ -20,8 +20,12 @@ userRouter
     .route("/edit")
     .all(protectorMiddleware)
     .get(getEdit)
-    .post(uploadFiles.single("avatar"), postEdit);
-userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
+    .post(avatarUploads.single("avatar"), postEdit);
+userRouter
+    .route("/change-password")
+    .all(protectorMiddleware)
+    .get(getChangePassword)
+    .post(postChangePassword);
 userRouter.get(":id", see);
 
 
