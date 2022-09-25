@@ -4,7 +4,7 @@ import {
     getEdit,
     postEdit, 
     logout, 
-    see, 
+    seeProfile, 
     startGithubLogin, 
     finishGithubLogin,
     getChangePassword,
@@ -26,7 +26,7 @@ userRouter
     .all(protectorMiddleware)
     .get(getChangePassword)
     .post(postChangePassword);
-userRouter.get(":id", see);
+userRouter.get("/:id", seeProfile);
 
 
 export default userRouter;
