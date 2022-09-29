@@ -1,7 +1,6 @@
 extends base
 
 block content
-    h4 Join
     if errorMessage 
         p=errorMessage
     form(method="POST")
@@ -12,11 +11,7 @@ block content
         input(name="password2", placeholder="Confirm Password", type="password", required)
         input(name="location", placeholder="Location",type="text", required)
         input(value="Join", type="submit")
-        br
-        a(href="users/github/start") Join with Github
-        br
-        a(href="users/github/start") Join with Kakao
-    hr
-    div 
+        include partials/social-login
+    div.auth-switch 
         span Already have an account?
-        a(href="/login") Login now &rarr;
+        a(href="/login")  Login now &rarr;

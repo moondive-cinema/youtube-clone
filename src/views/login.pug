@@ -1,18 +1,13 @@
 extends base
 
 block content
-    h4 Login
     if errorMessage 
         p=errorMessage
     form(method="POST")
         input(name="username", placeholder="Username",type="text", required)
         input(name="password", placeholder="Password", type="password", required)
         input(value="Login", type="submit")
-        br
-        a(href="users/github/start") Continue with Github
-        br
-        a(href="users/github/start") Continue with Kakao
-    hr
-    div 
+        include partials/social-login
+    div.auth-switch 
         span Don't have an account?
-        a(href="/join") Create one now &rarr;
+        a(href="/join")  Create one now &rarr;
