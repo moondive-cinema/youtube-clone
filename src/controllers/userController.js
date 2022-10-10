@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => {
-    return res.render("Join", {pageTitle: "Join"});
+    return res.render("join", {pageTitle: "Join"});
 };
 
 
