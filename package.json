@@ -7,8 +7,12 @@
     "url": "git+https://github.com/moondive-cinema/youtube-clone.git"
   },
   "scripts": {
+    "start": "node build/init.js",
+    "build": "npm run build:server && npm run build:assets",
+    "build:server": "babel src -d build",
+    "build:assets": "webpack --mode=production",
     "dev": "nodemon",
-    "assets": "webpack --config webpack.config.js"
+    "assets": "webpack --mode=development --watch"
   },
   "author": "Moondive",
   "license": "MIT",
@@ -33,6 +37,7 @@
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
     "@babel/core": "^7.18.13",
     "@babel/node": "^7.18.10",
     "@babel/preset-env": "^7.18.10",
